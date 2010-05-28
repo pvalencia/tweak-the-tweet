@@ -33,25 +33,63 @@ class TweetSaverLog(object):
                                        source,
                                        tweet_id))
 
+import csv, os
+class TweetSaverCSV(object):
+    def __init__(self, filename):
+        self.filename = filename
+        if not os.path.isfile(self.filename):
+            self.writerow(['text', 'author', 'tweet_id', 'source', 'time'])
+
+    def writerow(self,row):
+        with open(self.filename, 'a') as destfile:
+            writer = csv.writer(destfile, delimiter=';', dialect='excel')
+            writer.writerow(row)
+    
+    def save_raw_tweet(self, text, author, tweet_id, source, time ):
+        self.writerow([text, author, tweet_id, source, time])
+
+import MySQLdb
+import traceback,sys
+class TweetSaverMySQL(object):
+    def __init__(self, host, db, user, passwd):
+        self.db =  MySQLdb.connect(host = host, user = user ,passwd = passwd ,db = db)
+        self.cursor = self.db.cursor()
+
+    def save_raw_tweet(self, text, author, tweet_id, source, time ):
+        sql = "INSERT INTO tweets (text, author, tweet_id, source, time) VALUES  ('%s', '%s', '%s', '%s', '%s' )" %  (text, author, tweet_id, source, time)
+        try:
+            # Execute the SQL command
+            self.cursor.execute(sql)
+            # Commit your changes in the database
+            self.db.commit()
+            print "Commit"
+
+        except:
+            # Rollback in case there is any error
+            self.db.rollback()
+            print "Rollback"
+            traceback.print_exc(file=sys.stdout)
+
+
 
 class StreamWatcherListener(tweepy.StreamListener):
     prog = re.compile(SECONDARY_REGEX_FILTER,
                       re.IGNORECASE)
 
-    def __init__(self, u, p, saver):
+    def __init__(self, u, p, savers):
         self.auth = tweepy.BasicAuthHandler(username = u,
                                             password = p)
         self.api = tweepy.API(auth_handler = self.auth,
                               secure=True,
                               retry_count=3)
-        self.saver = saver
+        self.savers = savers
 
     def on_status(self, status):
         log.debug(status.text)
 
         if self.prog.search(status.text):
-
-            self.saver.save_raw_tweet(status.text,
+            for saver in self.savers:
+                saver.save_raw_tweet(status.text,
                                         status.author.screen_name,                                                      
                                         status.id,
                                         status.source,                                                   
@@ -72,8 +110,10 @@ def main():
         username = 'TtTReadChile'
         password = 'TtT4Chile'
         
-        saver = TweetSaverLog()
-        listener = StreamWatcherListener(username, password, saver)
+        log_saver = TweetSaverLog()
+        csv_saver = TweetSaverCSV('tweets.csv')
+        mysql_saver = TweetSaverMySQL('localhost', 'test', 'tweakthetweet', 'tweakthetweet')
+        listener = StreamWatcherListener(username, password, [log_saver, csv_saver, mysql_saver])
         stream = tweepy.Stream(username,
                                password,
                                listener,
