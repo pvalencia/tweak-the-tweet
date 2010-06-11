@@ -18,8 +18,8 @@ class TestTweetMatcher(unittest.TestCase):
 		#ie: "@pcordell @fgarrido hay match de Novia 1313"
 		self.tweet_matcher.parse(test_tweet_request)
 		self.tweet_matcher.parse(test_tweet_response)
-		assert test_tweet_request in self.tweet_matcher.parsed_requests
-		assert test_tweet_response in self.tweet_matcher.parsed_responses
+		assert "novia" in self.tweet_matcher.parsed_responses
+		assert "novia" in self.tweet_matcher.parsed_requests
 
 	def test_succesful_matching(self):	
 		test_tweet_request = "#chile #sebusca Novia #contacto Pablo Cordella #location Martin Fierro 1234 #info buena presencia #status urgente"
