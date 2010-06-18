@@ -32,7 +32,7 @@ class StreamWatcherListener(tweepy.StreamListener):
 							  secure=True,
 							  retry_count=3)
 		self.savers = savers
-		secondary_tag_string='#('+'|'.join(secondary_tag_list)+')'
+		secondary_tag_string='#('+'|'.join(map(lambda x: x[1:],secondary_tag_list))+')'
 		self.prog = re.compile(secondary_tag_string,re.IGNORECASE)
 
 	def on_status(self, status):
