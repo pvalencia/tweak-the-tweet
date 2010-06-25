@@ -20,8 +20,6 @@ class TestTweetMatcher(unittest.TestCase):
 	def test_succesful_storing(self):	
 		test_tweet_request = "#chile #sebusca Novia #contacto Pablo Cordella #location Martin Fierro 1234 #info buena presencia #status urgente"
 		test_tweet_response = "#chile #encontre Novia #contacto Felipe Garrido #location Principe de Gales"
-		#seria ideal que esta cosa haga un tweet con referencia a ambos respecto al match
-		#ie: "@pcordell @fgarrido hay match de Novia 1313"
 		self.tweet_matcher.parse(test_tweet_request)
 		self.tweet_matcher.parse(test_tweet_response)
 		assert "novia" in self.tweet_matcher.parsed_responses[0]
@@ -35,8 +33,8 @@ class TestTweetMatcher(unittest.TestCase):
 		assert self.tweet_matcher.parse(test_tweet_response)
 		
 	def test_succesful_secondary_storage(self):
-	    """seria ideal que esta cosa haga un tweet con referencia a ambos respecto al match
-		ie: "@pcordell @fgarrido hay match de Novia 1313"""
+	    #seria ideal que esta cosa haga un tweet con referencia a ambos respecto al match
+		#ie: "@pcordell @fgarrido hay match de Novia 1313"""
 		test_tweet_request = "#chile #sebusca Novia #contacto Pablo Cordella #location Martin Fierro 1234 #info buena presencia #status urgente"
 		test_tweet_response = "#chile #encontre Novia #contacto Felipe Garrido #location Principe de Gales"
 		
@@ -48,7 +46,7 @@ class TestTweetMatcher(unittest.TestCase):
 		assert "pablo cordella" in self.tweet_matcher.parsed_requests[0][2]
 		
 	def test_succesful_secondary_storage(self):
-		"""#seria ideal que esta cosa haga un tweet con referencia a ambos respecto al match
+		#seria ideal que esta cosa haga un tweet con referencia a ambos respecto al match
 		#ie: "@pcordell @fgarrido hay match de Novia 1313 """
 		test_tweet_request = "#chile #sebusca Novia #contacto Pablo Cordella #location Martin Fierro 1234 #info buena presencia #status urgente"
 		test_tweet_response = "#chile #encontre Novia #contacto Felipe Garrido #location Principe de Gales"
