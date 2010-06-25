@@ -63,7 +63,7 @@ class IniReader(object):
 		config.read(file_path)
 		self.username = config.get('CONFIG','twitter_user')
 		self.password = config.get('CONFIG','twitter_pass')
-		self.primary_tag_list = config.get('TAGS','situation')
+		self.primary_tag_list = config.get('TAGS','situation').split(' ')
 		self.secondary_tag_list = []
 		primary_categories=config.get('TAGS','primary_categories')
 		primary_categories=primary_categories.split(' ')
