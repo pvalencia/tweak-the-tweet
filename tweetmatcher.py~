@@ -30,15 +30,15 @@ class TweetMatcher(object):
 			return matches
 		return []
 			
-	def get_value(self, tweet, type):
-		result = re.search('('+ (' |').join(type) + ')([^#]*)', tweet)
+	def get_value(self, tupla_tweet, type):
+		result = re.search('('+ (' |').join(type) + ')([^#]*)', tupla_tweet[1])
 		if result:
 			return result.group(2).strip().lower()
 		return ""
 		
 	
-	def secondary_info(self, tweet, str):
-		result = re.search('('+ ('|').join(str) + ')([^#]*)(.*)', tweet)
+	def secondary_info(self, tupla_tweet, str):
+		result = re.search('('+ ('|').join(str) + ')([^#]*)(.*)', tupla_tweet[1])
 		if result:
 			return result.group(3).strip().lower()
 		return ""

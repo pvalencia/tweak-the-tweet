@@ -1,0 +1,42 @@
+[CONFIG]
+connectors = MySQL CSV
+twitter_user= TtTReadChile
+twitter_pass= TtT4Chile
+twitter_host= 
+
+[MYSQL]
+host = localhost
+port = 3306
+user = tweakthetweet
+pass = ttt
+db_name = haiti_db
+
+[CSV]
+path = tweets.csv
+
+[TAGS]
+;Estos deben existir siempre:
+;situation = #chile #earthquake #tsunami #terremotochile #fuerzachile;
+situation = #chile #terremoto #fmarepoto
+primary_categories = PEOPLE HELP INFO
+contact = #contacto #contact #contactar #con #cont #avisar #telefono #fono #tel #cel
+location= #sitio #location #en #loc #zona #localidad #gps #lugar
+name= #name #nombre
+
+[PEOPLE]
+name = people_finder
+request_tags = #estaibien #missing #ruok #sebusca #estaibien #buscapersona #estasbien
+response_tags = #tavivo #estabien #tabien #estoybien #todobien #toybien #imok #survivor #encontr #found
+
+
+[HELP]
+name = help_finder
+request_tags = #necesita #need #necesidad
+response_tags = #donacion #ofrece #tenemos #tengo #have #offer #dono
+
+[INFO]
+name = info_finder
+request_tags = 
+response_tags = #closed #open #damage #evac #edificiocolapso
+
+[EXTRA-TAGS]

@@ -50,4 +50,9 @@ class TweetDispatcher(object):
         sql = "SELECT id, text FROM  tweets"
         self.db.query(sql)
         return self.db.store_result()                   
+            
+#necesitamos del ini_reader
+#lista con nombre de categoria
+#los datos de la base de datos
+#la lista de contactos, location y name
         
