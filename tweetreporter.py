@@ -1,4 +1,4 @@
-import MySQLdb
+import MySQLdb, csv
 from ini_reader import IniReader
 
 class TweetReporter(object):
@@ -16,29 +16,30 @@ class TweetReporter(object):
 		
 
 	def match_finder(self, min_date):
-		sql = "SELECT request_id, response_id, type FROM tweets_matched WHERE date > '%s' %(min_date)";
+		sql = "SELECT request_id, response_id, type FROM tweets_matched WHERE date > '%s';" % min_date
 		self.cursor.execute(sql)
-        return self.fetchall()
+		return self.cursor.fetchall()
 		
 	def tweet_finder(self, matrix):
 		result=[]
 		for row in matrix:
 			match=[]
-			sql1 =  "SELECT * FROM tweets_parsed WHERE id_tweet = '%s';" % (row[0],row[2])
+			sql1 =  "SELECT * FROM tweets_parsed WHERE id_tweet = %s AND category = '%s';" % (row[0],row[2])
 			self.cursor.execute(sql1)
-			match = list(self.fetchall()[0])
-			sql2 =  "SELECT * FROM tweets_parsed WHERE id_tweet = '%s';" % (row[1],row[2])
+			match = list(self.cursor.fetchall()[0])
+			sql2 =  "SELECT * FROM tweets_parsed WHERE id_tweet = %s AND category = '%s';" % (row[1],row[2])
 			self.cursor.execute(sql2)
-			match += list(self.fetchall()[0])
+			match += list(self.cursor.fetchall()[0])
 			result.append(match)
-		result
+		return result
 			
 	def __call__(self,output_path):
-		pares=match_finder(self.date)
+		pares=self.match_finder(self.date)
 		writer = csv.writer(open(output_path,'w'), delimiter=';', dialect='excel')
-		for match in tweet_finder(pares):
+		writer.writerow(['id_tweet','type','category','info','contact','location','name','time','id_tweet','type','category','info','contact','location','name','time'])
+		for match in self.tweet_finder(pares):
 			writer.writerow(match)
 			
 if __name__=="__main__":
-	t=TweetDispatcher("config-chile.ini")
+	t=TweetReporter("2010-01-01 0:00:00","config-chile.ini")
 	t("asdf.csv")
