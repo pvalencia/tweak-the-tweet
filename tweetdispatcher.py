@@ -42,9 +42,9 @@ class TweetDispatcher(object):
 					#modificar el mysql para que lea los parametros de la bd del .ini
 					#ponerse de acuerdo que hacer cuando se hace un match
 					if type==tweetmatcher.REQ:
-						map(lambda x:self.tweet_match(mysql_host,mysql_user,mysql_pass,mysql_db_name,x,tweet[0]),text)
+						map(lambda x:self.tweet_match(mysql_host,mysql_user,mysql_pass,mysql_db_name,x,tweet[0],categoria),text)
 					elif type==tweetmatcher.RESP:
-						map(lambda x:self.tweet_match(mysql_host,mysql_user,mysql_pass,mysql_db_name,tweet[0],x),text)
+						map(lambda x:self.tweet_match(mysql_host,mysql_user,mysql_pass,mysql_db_name,tweet[0],x,categoria),text)
 
 
 	def tweet_reader(self, host, user, passwd, db):
@@ -53,9 +53,9 @@ class TweetDispatcher(object):
 		self.db.query(sql)
 		return self.db.store_result()
 
-	def tweet_match(self, host, user, passwd, db, request_id, response_id):
+	def tweet_match(self, host, user, passwd, db, request_id, response_id, category):
 		self.db =  MySQLdb.connect(host, user, passwd, db)
-		sql = "INSERT INTO tweets_matched(request_id, response_id,date) VALUES(%s, %s,NOW());" % (request_id, response_id)
+		sql = "INSERT INTO tweets_matched(request_id, response_id, date, type) VALUES(%s, %s, NOW(), '%s');" % (request_id, response_id, category)
 		self.db.query(sql)
 
 if __name__ == '__main__':

@@ -16,13 +16,29 @@ class TweetReporter(object):
 		
 
 	def match_finder(self, min_date):
-		sql = "SELECT request_id, response_id FROM tweets_matched WHERE date > '%s' %(min_date)";
+		sql = "SELECT request_id, response_id, type FROM tweets_matched WHERE date > '%s' %(min_date)";
 		self.cursor.execute(sql)
         return self.fetchall()
 		
 	def tweet_finder(self, matrix):
+		result=[]
 		for row in matrix:
-			sql =  "SELECT * FROM tweets_parsed WHERE id_tweet = '%s' %(row[0]) OR id_tweet = '%s' %(row[1])"
-			self.cursor.execute(sql)
-			data = self.fetchall()
+			match=[]
+			sql1 =  "SELECT * FROM tweets_parsed WHERE id_tweet = '%s';" % (row[0],row[2])
+			self.cursor.execute(sql1)
+			match = list(self.fetchall()[0])
+			sql2 =  "SELECT * FROM tweets_parsed WHERE id_tweet = '%s';" % (row[1],row[2])
+			self.cursor.execute(sql2)
+			match += list(self.fetchall()[0])
+			result.append(match)
+		result
 			
+	def __call__(self,output_path):
+		pares=match_finder(self.date)
+		writer = csv.writer(open(output_path,'w'), delimiter=';', dialect='excel')
+		for match in tweet_finder(pares):
+			writer.writerow(match)
+			
+if __name__=="__main__":
+	t=TweetDispatcher("config-chile.ini")
+	t("asdf.csv")
