@@ -2,8 +2,7 @@ import MySQLdb, csv
 from ini_reader import IniReader
 
 class TweetReporter(object):
-	def __init__(self, date, file_path):
-		self.date = date
+	def __init__(self, file_path):
 		ini = IniReader(file_path)
 		mysql_info = ini.get_mysql_info()
 		self.host = mysql_info[0]
@@ -24,10 +23,10 @@ class TweetReporter(object):
 		result=[]
 		for row in matrix:
 			match=[]
-			sql1 =  "SELECT * FROM tweets_parsed WHERE id_tweet = %s AND category = '%s';" % (row[0],row[2])
+			sql1 =  "SELECT * FROM tweets_parsed WHERE id_tweet = '%s' AND category = '%s';" % (row[0],row[2])
 			self.cursor.execute(sql1)
 			match = list(self.cursor.fetchall()[0])
-			sql2 =  "SELECT * FROM tweets_parsed WHERE id_tweet = %s AND category = '%s';" % (row[1],row[2])
+			sql2 =  "SELECT * FROM tweets_parsed WHERE id_tweet = '%s' AND category = '%s';" % (row[1],row[2])
 			self.cursor.execute(sql2)
 			match += list(self.cursor.fetchall()[0])
 			result.append(match)
@@ -35,11 +34,16 @@ class TweetReporter(object):
 			
 	def __call__(self,output_path):
 		pares=self.match_finder(self.date)
-		writer = csv.writer(open(output_path,'w'), delimiter=';', dialect='excel')
+		matches=self.tweet_finder(pares)
+		self.write_csv(output_path,matches)
+		
+	def write_csv(self,path_file,tweets_list):
+		writer = csv.writer(open(path_file,'w'), delimiter=';', dialect='excel')
 		writer.writerow(['id_tweet','type','category','info','contact','location','name','time','id_tweet','type','category','info','contact','location','name','time'])
-		for match in self.tweet_finder(pares):
-			writer.writerow(match)
+		for tweets in tweets_list:
+			writer.writerow(tweets)
 			
 if __name__=="__main__":
 	t=TweetReporter("2010-01-01 0:00:00","config-chile.ini")
 	t("asdf.csv")
+
