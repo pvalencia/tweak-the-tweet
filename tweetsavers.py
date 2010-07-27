@@ -1,3 +1,4 @@
+from __future__ import with_statement
 from textwrap import TextWrapper
 import logging
 logging.basicConfig(level=logging.DEBUG)
