@@ -13,8 +13,8 @@ class TweetSaverLog(object):
                                  subsequent_indent=' ')
 
     def save_raw_tweet( self, text, author, tweet_id, source, time ):
-        self.log.info(self.status_wrapper.fill(text))                            
-        self.log.info('%s %s via %s #%s\n' % ( 
+        self.log.info(self.status_wrapper.fill(text))
+        self.log.info('%s %s via %s #%s\n' % (
                                        author,
                                        time,
                                        source,
@@ -31,7 +31,7 @@ class TweetSaverCSV(object):
         with open(self.filename, 'a') as destfile:
             writer = csv.writer(destfile, delimiter=';', dialect='excel')
             writer.writerow(row)
-    
+
     def save_raw_tweet(self, text, author, tweet_id, source, time ):
         self.writerow([text, author, tweet_id, source, time])
 
@@ -56,7 +56,7 @@ class TweetSaverMySQL(object):
             self.db.rollback()
             log.info('MySQL Rollback')
             traceback.print_exc(file=sys.stdout)
-            
+
 
 
 
