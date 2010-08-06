@@ -14,8 +14,6 @@ class TweetMatcher(object):
 		self.contact= contact
 		self.name = name
 		self.dbconf=db_conf
-#		self.parsed_requests = []
-#		self.parsed_responses = []
 		
 	def parse(self, tupla_tweet):
 		tweet = tupla_tweet[1]

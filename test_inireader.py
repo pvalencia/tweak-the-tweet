@@ -3,11 +3,11 @@ import unittest
 
 class TestIniReader(unittest.TestCase):
     def setUp(self):
-        self.ini=IniReader("config-chile.ini")
+        self.ini=IniReader("testing.ini")
 
     def test_get_configs(self):
-        self.assertEquals(self.ini.get_username(),"TtTReadChile")
-        self.assertEquals(self.ini.get_password(),"TtT4Chile")
+        self.assertEquals(self.ini.get_username(),"twitter_user")
+        self.assertEquals(self.ini.get_password(),"twitter_pass")
 
     def test_get_primary_tags(self):
         self.assertEquals(self.ini.get_primary_tag_list(),["#chile","#terremoto","#fmarepoto"])
@@ -33,12 +33,10 @@ class TestIniReader(unittest.TestCase):
         self.assertEquals(self.ini.get_categories(),["PEOPLE","HELP","INFO"])
 
     def test_get_mysqlinfo(self):
-        self.assertEquals(self.ini.get_mysql_info(),["myhost","myport","myuser","mypass","mydatabase"])
+        self.assertEquals(self.ini.get_mysql_info(),["localhost","3306","ttt","ttt","ttt_testing"])
     
     def test_get_info_tags(self):
         self.assertEquals(self.ini.get_info_contact(), ["#contacto","#contact", "#contactar", "#con", "#cont", "#avisar", "#telefono", "#fono", "#tel", "#cel"])
         self.assertEquals(self.ini.get_info_location(), ["#sitio","#location","#en","#loc","#zona","#localidad","#gps","#lugar"])
         self.assertEquals(self.ini.get_info_name(),["#name","#nombre"])
 
-    def test_get_csv_info(self):
-        self.assertEquals(self.get_csv_info(), "mypath")

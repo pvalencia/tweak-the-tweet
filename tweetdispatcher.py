@@ -15,8 +15,6 @@ class TweetDispatcher(object):
 		mysql_pass = mysql_info[3]
 		mysql_db_name = mysql_info[4]
 
-
-
 		categorias = ini.get_categories()
 		diccionario = ini.get_categories_req_resp()
 

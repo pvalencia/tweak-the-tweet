@@ -1,5 +1,5 @@
 import unittest
-import chile_mysql as cm
+import TTT_retriever as cm
 import mock
 import tweepy
 
